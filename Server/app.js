@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser');
 const foodRouter = require('./Router/food')
 const studentRoutes = require("./Router/student");
 const problemRoutes = require("./Router/problem");
+const paymentRoutes = require("./Router/payment");
 
 app.use("/uploads", express.static("uploads"));
 
@@ -44,7 +45,7 @@ app.get('/api', (req, res) => {
 app.use("/students", studentRoutes);
 app.use("/api/foodplan", foodRouter);
 app.use("/problems", problemRoutes);
-
+app.use("/api/payments", paymentRoutes);
 
 
 module.exports = app;
