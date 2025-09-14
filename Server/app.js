@@ -7,6 +7,8 @@ const connectToDB = require('./Database/DB');
 const cookieParser = require('cookie-parser');
 // const transporter = require('./Config/emailConfig')
 const foodRouter = require('./Router/food')
+const studentRoutes = require("./Router/student");
+const problemRoutes = require("./Router/problem");
 
 app.use("/uploads", express.static("uploads"));
 
@@ -39,8 +41,9 @@ app.get('/api', (req, res) => {
   res.send('Hello, World!');
 });
 
-
+app.use("/students", studentRoutes);
 app.use("/api/foodplan", foodRouter);
+app.use("/problems", problemRoutes);
 
 
 
