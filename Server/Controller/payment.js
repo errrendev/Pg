@@ -1,36 +1,59 @@
-const cloudinary = require("cloudinary").v2;
-const paymentService = require("../Services/paymentservice");
+const paymentService = require("../services/paymentservice");
 
-// upload config (should be in a config file)
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
-exports.createPayment = async (req, res) => {
+exports.addPayment = async (req, res) => {
   try {
-    const file = req.file; // multer uploads file
-    const result = await cloudinary.uploader.upload(file.path, {
-      folder: "pg_payments",
+    const { studentName, roomNumber, amount, dateOfPay, method, transactionId, monthOfPayment } = req.body;
+
+    if (!req.file) {
+      return res.status(400).json({ message: "Screenshot is required" });
+    }
+
+    // Upload image to Cloudinary (via service)
+    const uploadResult = await paymentService.uploadScreenshot(req.file.path);
+
+    // Save payment (via service)
+    const payment = await paymentService.createPayment({
+      studentName,
+      roomNumber,
+      amount,
+      dateOfPay,
+      method,
+      transactionId,
+      monthOfPayment,
+      screenshotUrl: uploadResult.secure_url,
     });
 
-    const newPayment = await paymentService.createPayment({
-      ...req.body,
-      screenshotUrl: result.secure_url,
-    });
-
-    res.status(201).json({ success: true, data: newPayment });
+    res.status(201).json({ message: "Payment recorded successfully", payment });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    res.status(500).json({ message: "Error saving payment", error: error.message });
   }
 };
 
 exports.getPayments = async (req, res) => {
   try {
     const payments = await paymentService.getAllPayments();
-    res.status(200).json({ success: true, data: payments });
+    res.status(200).json({ payments });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    res.status(500).json({ message: "Error fetching payments", error: error.message });
+  }
+};
+
+exports.getPaymentsByMonth = async (req, res) => {
+  try {
+    const { month } = req.params;
+    const payments = await paymentService.getPaymentsByMonth(month);
+    res.status(200).json({ payments });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching payments", error: error.message });
+  }
+};
+
+exports.getPaymentsByStudent = async (req, res) => {
+  try {
+    const { studentName } = req.params;
+    const payments = await paymentService.getPaymentsByStudent(studentName);
+    res.status(200).json({ payments });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching payments", error: error.message });
   }
 };

@@ -5,10 +5,10 @@ const paymentSchema = new mongoose.Schema({
   roomNumber: { type: String, required: true },
   amount: { type: Number, required: true },
   dateOfPay: { type: Date, required: true },
-  method: { type: String, enum: ["UPI", "Cash", "Bank Transfer"], required: true },
+  method: { type: String, enum: ["Cash", "UPI", "Bank Transfer"], required: true },
   transactionId: { type: String, required: true },
-  month: { type: String, required: true }, // e.g. "September 2025"
-  screenshotUrl: { type: String, required: true } // Cloudinary URL
+  monthOfPayment: { type: String, required: true }, // e.g. "September 2025"
+  screenshotUrl: { type: String, required: true }
 }, { timestamps: true });
 
 module.exports = mongoose.model("Payment", paymentSchema);

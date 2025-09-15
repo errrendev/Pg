@@ -1,11 +1,21 @@
 const express = require("express");
 const multer = require("multer");
-const paymentController = require("../Controller/payment");
+const {
+  addPayment,
+  getPayments,
+  getPaymentsByMonth,
+  getPaymentsByStudent,
+} = require("../Controller/payment");
 
 const router = express.Router();
-const upload = multer({ dest: "uploads/" }); // temporary storage
 
-router.post("/", upload.single("screenshot"), paymentController.createPayment);
-router.get("/", paymentController.getPayments);
+// Multer setup (store temp files before Cloudinary upload)
+const storage = multer.diskStorage({});
+const upload = multer({ storage });
+
+router.post("/payments", upload.single("screenshot"), addPayment);
+router.get("/payments", getPayments);
+router.get("/payments/month/:month", getPaymentsByMonth);
+router.get("/payments/student/:studentName", getPaymentsByStudent);
 
 module.exports = router;

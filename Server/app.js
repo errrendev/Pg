@@ -45,7 +45,7 @@ app.get('/api', (req, res) => {
 app.use("/students", studentRoutes);
 app.use("/api/foodplan", foodRouter);
 app.use("/problems", problemRoutes);
-app.use("/api/payments", paymentRoutes);
+app.use("/api", paymentRoutes);
 
 
 module.exports = app;
