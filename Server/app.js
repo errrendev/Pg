@@ -45,11 +45,11 @@ app.get('/api', (req, res) => {
   res.send('Hello, World!');
 });
 
-app.use("/students", studentRoutes);
+app.use("/api/students", studentRoutes);
 app.use("/api/foodplan", foodRouter);
-app.use("/problems", problemRoutes);
-app.use("/api", paymentRoutes);
-app.use("/api/auth",authRoutes )
+app.use("/api/problems", problemRoutes);
+app.use("/api/payment", paymentRoutes);
+app.use("/api/auth",authRoutes );
 
 
 module.exports = app;

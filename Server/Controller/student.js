@@ -2,6 +2,7 @@ const studentService = require("../Services/studentservices");
 
 class StudentController {
   async createStudent(req, res) {
+    console.log(req.body)
     try {
       const student = await studentService.createStudent(req.body);
       res.status(201).json({ success: true, data: student });
