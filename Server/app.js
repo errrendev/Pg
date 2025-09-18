@@ -10,6 +10,8 @@ const foodRouter = require('./Router/food')
 const studentRoutes = require("./Router/student");
 const problemRoutes = require("./Router/problem");
 const paymentRoutes = require("./Router/payment");
+const authRoutes = require('./Router/auth')
+
 
 app.use("/uploads", express.static("uploads"));
 
@@ -25,9 +27,10 @@ app.use(cors({
       callback(new Error("Not allowed by CORS"));
     }
   },
-  credentials: true, // ✅ Allow credentials (important)
-  methods: ["GET", "POST", "PUT", "DELETE"], // ✅ Allow required methods
-  allowedHeaders: ["Content-Type", "Authorization"], // ✅ Allow necessary headers
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  exposedHeaders: ["set-cookie"],
 }));
 
 // app.use(cors())
@@ -46,6 +49,7 @@ app.use("/students", studentRoutes);
 app.use("/api/foodplan", foodRouter);
 app.use("/problems", problemRoutes);
 app.use("/api", paymentRoutes);
+app.use("/api/auth",authRoutes )
 
 
 module.exports = app;
